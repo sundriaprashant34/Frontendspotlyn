@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 const nav = [
@@ -12,6 +12,7 @@ const nav = [
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const navg = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const items =
     user?.role === 'ADMIN'
       ? [
@@ -63,28 +64,75 @@ export default function Layout({ children }) {
         </button>
       </aside>
       <main className="w-full md:ml-64">
-        <header className="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
-          <div className="px-5 md:px-8 py-4 flex justify-between items-center">
+        <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5 md:px-8 md:py-4">
             <div>
-              <div className="text-xs uppercase tracking-wider text-blue-600 font-bold">
+              <div className="text-[10px] uppercase tracking-wider text-blue-600 font-bold md:text-xs">
                 Spotlyn
               </div>
-              <div className="font-bold text-xl text-slate-900">
+              <div className="hidden font-bold text-xl text-slate-900 sm:block">
                 College Complaint & Lost/Found Management
               </div>
+              <div className="font-semibold text-sm text-slate-900 sm:hidden">Campus Hub</div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="text-right hidden sm:block">
+              <div className="hidden text-right sm:block">
                 <div className="font-semibold text-slate-800">{user?.name}</div>
                 <div className="text-xs text-slate-500">{user?.role}</div>
               </div>
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-                {user?.name?.[0]?.toUpperCase()}
+              <div
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700 sm:h-10 sm:w-10"
+                aria-label={user?.name}
+              >
+                {user?.name?.[0]?.toUpperCase() || '?'}
               </div>
+              <button
+                type="button"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-xl text-slate-700 hover:bg-slate-50 md:hidden"
+                aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-navigation"
+                onClick={() => setMobileMenuOpen((open) => !open)}
+              >
+                <span aria-hidden="true">{mobileMenuOpen ? '×' : '☰'}</span>
+              </button>
             </div>
           </div>
+          {mobileMenuOpen && (
+            <nav
+              id="mobile-navigation"
+              aria-label="Mobile navigation"
+              className="absolute right-3 top-full z-50 grid w-[calc(100%-1.5rem)] max-w-sm grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-xl sm:grid-cols-3 md:hidden"
+            >
+              {items.map(([to, icon, label]) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `flex min-h-12 items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold ${isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`
+                  }
+                >
+                  <span aria-hidden="true">{icon}</span>
+                  <span>{label}</span>
+                </NavLink>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  logout();
+                  navg('/login');
+                }}
+                className="flex min-h-12 items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold text-red-600 hover:bg-red-50"
+              >
+                <span aria-hidden="true">🚪</span>
+                <span>Logout</span>
+              </button>
+            </nav>
+          )}
         </header>
-        <div className="p-5 md:p-8">{children}</div>
+        <div className="p-4 sm:p-5 md:p-8">{children}</div>
       </main>
     </div>
   );

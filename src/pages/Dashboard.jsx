@@ -22,14 +22,6 @@ export default function Dashboard() {
           <h1>Hello, {user.name} 👋</h1>
           <p>Track your college complaints, item reports, and updates from one dashboard.</p>
         </div>
-        <div className="flex gap-3">
-          <Link to="/report-problem" className="btn-primary">
-            + Report Issue
-          </Link>
-          <Link to="/lost-item" className="btn-light">
-            Report Lost Item
-          </Link>
-        </div>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
         <StatCard icon="📊" label="Total Reports" value={data.length} />
@@ -54,14 +46,14 @@ export default function Dashboard() {
               to={`/my-reports?open=${c._id}`}
               className="block border border-slate-200 rounded-xl p-4 hover:border-blue-300"
             >
-              <div className="flex justify-between gap-3">
-                <div>
+              <div className="flex flex-col justify-between gap-2 sm:flex-row sm:gap-3">
+                <div className="min-w-0">
                   <div className="font-semibold">{c.title}</div>
-                  <div className="text-sm text-slate-500">
+                  <div className="break-words text-sm text-slate-500">
                     {c.complaintId} · {c.building} / {c.room}
                   </div>
                 </div>
-                <span className="badge">{c.status}</span>
+                <span className="badge self-start sm:self-auto">{c.status}</span>
               </div>
             </Link>
           ))}

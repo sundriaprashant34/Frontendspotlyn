@@ -232,8 +232,8 @@ export default function Admin() {
             {lostFoundError}
           </p>
         )}
-        <div className="card overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="card">
+          <table className="mobile-card-table w-full text-sm">
             <thead>
               <tr className="text-left text-slate-500 border-b">
                 <th className="py-3 pr-4">Item</th>
@@ -247,13 +247,13 @@ export default function Admin() {
             <tbody>
               {reportItems.map((item) => (
                 <tr key={item._id} className="border-b last:border-0 align-top">
-                  <td className="py-4 pr-4">
+                  <td className="py-4 pr-4" data-label="Item">
                     <div className="font-semibold">{item.itemName}</div>
                     {item.description && (
                       <p className="text-xs text-slate-500 mt-1 max-w-sm">{item.description}</p>
                     )}
                   </td>
-                  <td className="pr-4">
+                  <td className="pr-4" data-label="Photo">
                     {item.image ? (
                       <a href={item.image} target="_blank" rel="noreferrer">
                         <img
@@ -266,17 +266,19 @@ export default function Admin() {
                       <span className="text-xs text-slate-400">No photo</span>
                     )}
                   </td>
-                  <td className="pr-4">
+                  <td className="pr-4" data-label="Category / Location">
                     {item.category}
                     <div className="text-xs text-slate-500 mt-1">
                       {item.location || 'No location'}
                     </div>
                   </td>
-                  <td className="pr-4">{item.reporter?.name || 'Unknown'}</td>
-                  <td className="pr-4">
+                  <td className="pr-4" data-label="Reported by">
+                    {item.reporter?.name || 'Unknown'}
+                  </td>
+                  <td className="pr-4" data-label="Date">
                     {item.date ? new Date(item.date).toLocaleDateString() : 'Not provided'}
                   </td>
-                  <td>
+                  <td data-label="Status">
                     <select
                       className="field min-w-36"
                       aria-label={`Status for ${item.itemName}`}
@@ -579,7 +581,7 @@ export default function Admin() {
           )}
 
           <div className="overflow-x-auto mt-4">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[700px] text-sm">
               <thead>
                 <tr className="text-left text-slate-500 border-b">
                   <th className="py-3">Name</th>
@@ -632,7 +634,7 @@ export default function Admin() {
             {complaintsPage ? 'All Complaints' : 'Complaint Management'}
           </h2>
           <div className="overflow-x-auto mt-4">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[760px] text-sm">
               <thead>
                 <tr className="text-left text-slate-500 border-b">
                   <th className="py-3">ID</th>
