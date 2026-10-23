@@ -38,7 +38,7 @@ export default function Login() {
       setErr(
         e.response?.data?.message ||
           (e.request
-            ? 'Cannot reach Spotlyn API. Start the backend with "npm run server" or "npm run fullstack".'
+            ? 'Please wait for the database connection to be established.'
             : 'Login failed. Please try again.'),
       );
     }
