@@ -11,6 +11,7 @@ import Profile from './pages/Profile';
 import LostFound from './pages/LostFound';
 import Admin from './pages/Admin';
 import Staff from './pages/Staff';
+import Chatbot from './pages/Chatbot';
 function Guard({ children, roles }) {
   const { user, loading } = useAuth();
   if (loading)
@@ -75,6 +76,14 @@ export default function App() {
         element={
           <Guard>
             <Profile />
+          </Guard>
+        }
+      />
+      <Route
+        path="/chatbot"
+        element={
+          <Guard>
+            <Chatbot />
           </Guard>
         }
       />

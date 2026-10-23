@@ -7,6 +7,7 @@ const nav = [
   ['/lost-item', '📦', 'Lost Item'],
   ['/found-item', '🔎', 'Found Item'],
   ['/my-reports', '🗂️', 'My Reports'],
+  ['/chatbot', '🤖', 'Spotlyn AI'],
   ['/profile', '👤', 'Profile'],
 ];
 export default function Layout({ children }) {
@@ -21,9 +22,13 @@ export default function Layout({ children }) {
           ['/admin/lost-found', '📦', 'Lost & Found'],
           ['/admin/staff', '🧑‍🔧', 'Staff'],
           ['/admin/students', '🎓', 'Students'],
+          ['/chatbot', '🤖', 'Spotlyn AI'],
         ]
       : user?.role === 'STAFF'
-        ? [['/staff', '🛠️', 'Staff Dashboard']]
+        ? [
+            ['/staff', '🛠️', 'Staff Dashboard'],
+            ['/chatbot', '🤖', 'Spotlyn AI'],
+          ]
         : nav;
   return (
     <div className="min-h-screen bg-slate-100 flex">
