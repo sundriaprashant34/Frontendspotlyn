@@ -39,15 +39,15 @@ export default function Login() {
         e.response?.data?.message ||
           (e.request
             ? 'Please wait for the database connection to be established.'
-            : 'Login failed. Please try again.'),
+            : 'Login failed. Please try again.')
       );
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 flex items-center justify-center p-5">
-      <form onSubmit={submit} className="w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
+    <div className="ambient-background min-h-screen flex items-center justify-center p-5">
+      <form onSubmit={submit} className="glass-panel w-full max-w-md rounded-3xl p-8">
         <div className="flex items-center gap-3 mb-7">
-          <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
+          <div className="w-12 h-12 rounded-xl bg-aubergine-800 text-white flex items-center justify-center text-xl font-bold">
             S
           </div>
           <div>
@@ -73,12 +73,15 @@ export default function Login() {
           onChange={(e) => setPw(e.target.value)}
           required
         />
-        <button className="w-full mt-5 py-3 rounded-xl bg-blue-600 text-white font-semibold">
+        <button className="w-full mt-5 py-3 rounded-xl bg-aubergine-700 hover:bg-aubergine-800 text-white font-semibold">
           Login
         </button>
         <p className="text-center text-sm text-slate-500 mt-5">
           New student?{' '}
-          <Link className="text-blue-600 font-semibold" to="/register">
+          <Link
+            className="text-aubergine-700 font-semibold hover:text-aubergine-900"
+            to="/register"
+          >
             Create account
           </Link>
         </p>

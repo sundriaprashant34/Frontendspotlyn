@@ -4,13 +4,63 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#12203A', // deep navy — header, nav, primary text
-        parchment: '#F6F2E7', // warm paper background
-        signal: '#FFA630', // amber — "lost" pins, warnings
-        found: '#2A9D8F', // teal — "found" pins, success
-        alert: '#E63946', // coral red — emergency accent
-        slate: '#4B5A6A', // secondary text
-        line: '#DAD3C0', // hairline borders on parchment
+        ink: '#321B36',
+        parchment: '#EEF2F5',
+        aubergine: {
+          50: '#F6F1F7',
+          100: '#EDE3EF',
+          200: '#DCC9E0',
+          300: '#C6A9CC',
+          400: '#A97EAF',
+          500: '#895E91',
+          600: '#704778',
+          700: '#58365F',
+          800: '#45294B',
+          900: '#321B36',
+          950: '#211224',
+        },
+        ice: {
+          50: '#FCFDFF',
+          100: '#EEF2F5',
+          200: '#D9E0E6',
+          300: '#C3CDD6',
+          400: '#A4B2BE',
+          500: '#8595A3',
+          600: '#687987',
+          700: '#50616F',
+          800: '#394955',
+          900: '#25343F',
+        },
+        marigold: {
+          50: '#FFF9E8',
+          100: '#FFF0C2',
+          200: '#FFE28A',
+          300: '#FFD04D',
+          400: '#F7BB2F',
+          500: '#EBA914',
+          600: '#C9870C',
+          700: '#9C650D',
+          800: '#754D12',
+          900: '#5F4015',
+        },
+        blue: {
+          50: '#F6F1F7',
+          100: '#EDE3EF',
+          200: '#DCC9E0',
+          300: '#C6A9CC',
+          400: '#A97EAF',
+          500: '#895E91',
+          600: '#704778',
+          700: '#58365F',
+          800: '#45294B',
+          900: '#321B36',
+          950: '#211224',
+        },
+        inkMuted: '#64566A',
+        line: '#D9E0E6',
+        signal: '#EBA914',
+        found: '#704778',
+        alert: '#B93D50',
       },
       fontFamily: {
         display: ['Fraunces', 'serif'],

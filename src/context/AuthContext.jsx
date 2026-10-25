@@ -22,18 +22,34 @@ export function AuthProvider({ children }) {
     setUser(r.data.user);
     return r.data.user;
   };
-  const register = async (data) => {
+  const requestRegistrationOtp = async (data) => {
     const r = await api.post('/auth/register', data);
+    return r.data;
+  };
+  const verifyRegistrationOtp = async (email, code) => {
+    const r = await api.post('/auth/register/verify', { email, code });
     localStorage.setItem('spotlyn_token', r.data.token);
     setUser(r.data.user);
     return r.data.user;
   };
+  const updateUser = (updatedUser) => setUser(updatedUser);
   const logout = () => {
     localStorage.removeItem('spotlyn_token');
     setUser(null);
   };
   return (
-    <C.Provider value={{ user, loading, isAuthenticated: !!user, login, register, logout }}>
+    <C.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        login,
+        requestRegistrationOtp,
+        verifyRegistrationOtp,
+        updateUser,
+        logout,
+      }}
+    >
       {children}
     </C.Provider>
   );

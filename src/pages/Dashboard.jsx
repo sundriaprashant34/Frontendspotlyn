@@ -10,7 +10,9 @@ export default function Dashboard() {
     api.get('/complaints/mine').then((r) => setData(r.data));
   }, []);
   const counts = {
-    pending: data.filter((x) => ['Submitted', 'Verified', 'Assigned'].includes(x.status)).length,
+    pending: data.filter((x) =>
+      ['Submitted', 'Verified', 'Assigned', 'Approved'].includes(x.status)
+    ).length,
     inProgress: data.filter((x) => x.status === 'In Progress').length,
     resolved: data.filter((x) => x.status === 'Resolved').length,
   };

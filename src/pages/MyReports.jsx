@@ -41,11 +41,13 @@ export default function MyReports() {
                       ? '100%'
                       : c.status === 'In Progress'
                         ? '75%'
-                        : c.status === 'Assigned'
-                          ? '55%'
-                          : c.status === 'Verified'
-                            ? '35%'
-                            : '15%',
+                        : c.status === 'Approved'
+                          ? '65%'
+                          : c.status === 'Assigned'
+                            ? '55%'
+                            : c.status === 'Verified'
+                              ? '35%'
+                              : '15%',
                 }}
               />
             </div>

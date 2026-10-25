@@ -8,7 +8,6 @@ const nav = [
   ['/found-item', '🔎', 'Found Item'],
   ['/my-reports', '🗂️', 'My Reports'],
   ['/chatbot', '🤖', 'Spotlyn AI'],
-  ['/profile', '👤', 'Profile'],
 ];
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
@@ -31,11 +30,11 @@ export default function Layout({ children }) {
           ]
         : nav;
   return (
-    <div className="min-h-screen bg-slate-100 flex">
-      <aside className="w-64 bg-slate-900 text-white fixed inset-y-0 left-0 z-30 hidden md:flex flex-col">
+    <div className="ambient-background min-h-screen flex">
+      <aside className="w-64 bg-ink text-white fixed inset-y-0 left-0 z-30 hidden md:flex flex-col">
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center font-bold text-xl">
+            <div className="w-10 h-10 rounded-xl bg-marigold-400 text-ink flex items-center justify-center font-bold text-xl">
               S
             </div>
             <div>
@@ -69,10 +68,10 @@ export default function Layout({ children }) {
         </button>
       </aside>
       <main className="w-full md:ml-64">
-        <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <header className="sticky top-0 z-20 border-b border-white/70 bg-ice-50/75 shadow-sm backdrop-blur-xl">
           <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5 md:px-8 md:py-4">
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-blue-600 font-bold md:text-xs">
+              <div className="text-[10px] uppercase tracking-wider text-aubergine-700 font-bold md:text-xs">
                 Spotlyn
               </div>
               <div className="hidden font-bold text-xl text-slate-900 sm:block">
@@ -85,12 +84,19 @@ export default function Layout({ children }) {
                 <div className="font-semibold text-slate-800">{user?.name}</div>
                 <div className="text-xs text-slate-500">{user?.role}</div>
               </div>
-              <div
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700 sm:h-10 sm:w-10"
-                aria-label={user?.name}
+              <button
+                type="button"
+                className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-marigold-100 font-bold text-aubergine-900 ring-2 ring-white transition hover:ring-marigold-400 sm:h-10 sm:w-10"
+                aria-label="Open profile"
+                title="Open profile"
+                onClick={() => navg('/profile')}
               >
-                {user?.name?.[0]?.toUpperCase() || '?'}
-              </div>
+                {user?.profilePhoto ? (
+                  <img src={user.profilePhoto} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  user?.name?.[0]?.toUpperCase() || '?'
+                )}
+              </button>
               <button
                 type="button"
                 className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-xl text-slate-700 hover:bg-slate-50 md:hidden"
@@ -115,7 +121,7 @@ export default function Layout({ children }) {
                   to={to}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex min-h-12 items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold ${isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`
+                    `flex min-h-12 items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold ${isActive ? 'bg-aubergine-50 text-aubergine-800' : 'text-slate-600 hover:bg-slate-50'}`
                   }
                 >
                   <span aria-hidden="true">{icon}</span>

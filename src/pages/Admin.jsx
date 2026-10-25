@@ -818,6 +818,12 @@ export default function Admin() {
                       : '',
                   ],
                   ['Admin remark', complaint.adminRemark],
+                  [
+                    'Staff decision reason',
+                    complaint.staffDecisionReason
+                      ? `${complaint.staffDecisionReason}${complaint.staffDecisionDetails ? `: ${complaint.staffDecisionDetails}` : ''}`
+                      : '',
+                  ],
                   ['Resolution remark', complaint.resolutionRemark],
                 ];
                 return (
