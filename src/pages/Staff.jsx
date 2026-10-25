@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
-import { APPROVAL_REASONS, REJECTION_REASONS } from '../../../shared/complaintReview.js';
+import { APPROVAL_REASONS, REJECTION_REASONS } from '../utils/complaintReview.js';
 
 export default function Staff() {
   const [data, setData] = useState([]);
