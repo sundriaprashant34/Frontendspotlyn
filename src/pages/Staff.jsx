@@ -171,7 +171,7 @@ export default function Staff() {
                     </button>
                   </>
                 )}
-                {['Assigned', 'Approved'].includes(c.status) && (
+                {c.status === 'Approved' && (
                   <button className="btn-light" onClick={() => update(c._id, 'In Progress')}>
                     Start Work
                   </button>

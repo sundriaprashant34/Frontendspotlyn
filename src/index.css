@@ -74,6 +74,28 @@
     -webkit-backdrop-filter: blur(28px) saturate(150%);
     backdrop-filter: blur(28px) saturate(150%);
   }
+  .glass-navbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.72);
+    background: rgba(248, 249, 253, 0.68);
+    box-shadow:
+      0 8px 30px rgba(50, 27, 54, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(24px) saturate(175%);
+    backdrop-filter: blur(24px) saturate(175%);
+  }
+  .glass-sidebar {
+    background: rgba(37, 25, 45, 0.88);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 12px 0 40px rgba(30, 20, 38, 0.14);
+    -webkit-backdrop-filter: blur(24px) saturate(145%);
+    backdrop-filter: blur(24px) saturate(145%);
+  }
+  .glass-menu {
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    background: rgba(252, 253, 255, 0.84);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+  }
   .ambient-background {
     position: relative;
     isolation: isolate;
@@ -85,12 +107,13 @@
     inset: -12%;
     content: '';
     background:
-      radial-gradient(ellipse at 12% 14%, rgba(137, 94, 145, 0.44), transparent 36%),
-      radial-gradient(ellipse at 82% 16%, rgba(255, 208, 77, 0.28), transparent 28%),
-      radial-gradient(ellipse at 76% 82%, rgba(169, 126, 175, 0.38), transparent 34%),
-      radial-gradient(ellipse at 20% 88%, rgba(255, 255, 255, 0.9), transparent 34%),
-      linear-gradient(140deg, #e5eaf0 4%, #f4f3f5 48%, #e8edf1 100%);
-    background-size: 130% 130%;
+      radial-gradient(ellipse at 10% 12%, rgba(137, 94, 145, 0.52), transparent 38%),
+      radial-gradient(ellipse at 88% 18%, rgba(255, 208, 77, 0.36), transparent 32%),
+      radial-gradient(ellipse at 78% 84%, rgba(169, 126, 175, 0.46), transparent 38%),
+      radial-gradient(ellipse at 18% 88%, rgba(255, 255, 255, 0.95), transparent 38%),
+      radial-gradient(ellipse at 48% 48%, rgba(203, 220, 230, 0.5), transparent 58%),
+      linear-gradient(140deg, #e2e8ef 4%, #f6f2f6 48%, #e5edf1 100%);
+    background-size: 145% 145%;
     animation: ambient-drift 24s ease-in-out infinite alternate;
     pointer-events: none;
   }
@@ -213,10 +236,17 @@ textarea::placeholder {
 @media (prefers-reduced-transparency: reduce) {
   .card,
   .glass-panel,
-  .hero {
+  .hero,
+  .glass-navbar,
+  .glass-menu {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background-color: #fcfdff;
+  }
+  .glass-sidebar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: #25192d;
   }
   .ambient-background::before {
     animation: none;
