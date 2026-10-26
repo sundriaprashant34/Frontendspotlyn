@@ -677,35 +677,23 @@ export default function Admin() {
                       </button>
                     </td>
                     <td>
-                      {complaint.status === 'Verified' && (
-                        <>
-                          <select
-                            className="field min-w-48"
-                            value={
-                              selection[complaint._id] || complaint.assignedStaff?._id || ''
-                            }
-                            onChange={(event) =>
-                              setSelection({ ...selection, [complaint._id]: event.target.value })
-                            }
-                          >
-                            <option value="">Select staff</option>
-                            {staff.map((member) => (
-                              <option key={member._id} value={member._id}>
-                                {member.name} · {member.staffDesignation || member.staffDepartment}
-                                {member.staffDesignation && member.staffDepartment
-                                  ? ` (${member.staffDepartment})`
-                                  : ''}
-                              </option>
-                            ))}
-                          </select>
-                          <button
-                            className="text-blue-600 font-semibold mt-1"
-                            onClick={() => assign(complaint._id)}
-                          >
-                            Assign
-                          </button>
-                        </>
-                      )}
+                      <select
+                        className="field min-w-48"
+                        value={selection[complaint._id] || complaint.assignedStaff?._id || ''}
+                        onChange={(event) =>
+                          setSelection({ ...selection, [complaint._id]: event.target.value })
+                        }
+                      >
+                        <option value="">Select staff</option>
+                        {staff.map((member) => (
+                          <option key={member._id} value={member._id}>
+                            {member.name} · {member.staffDesignation || member.staffDepartment}
+                            {member.staffDesignation && member.staffDepartment
+                              ? ` (${member.staffDepartment})`
+                              : ''}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                     <td className="space-x-2">
                       {complaint.status === 'Submitted' && (
@@ -723,6 +711,14 @@ export default function Admin() {
                             Reject
                           </button>
                         </>
+                      )}
+                      {complaint.status === 'Verified' && (
+                        <button
+                          className="text-blue-600 font-semibold"
+                          onClick={() => assign(complaint._id)}
+                        >
+                          Assign
+                        </button>
                       )}
                     </td>
                   </tr>
