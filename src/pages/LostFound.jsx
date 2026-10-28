@@ -45,7 +45,6 @@ export default function LostFound({ type = 'lost' }) {
   const [file, setFile] = useState(null);
   const [claimTarget, setClaimTarget] = useState(null);
   const [claimDetails, setClaimDetails] = useState('');
-  const [handoverCodes, setHandoverCodes] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [busyAction, setBusyAction] = useState('');
 
@@ -139,27 +138,11 @@ export default function LostFound({ type = 'lost' }) {
     setBusyAction(`handover-${claim._id}`);
     setError('');
     try {
-      await api.post(`/lost-found/claims/${claim._id}/confirm-handover`, {
-        code: handoverCodes[claim._id] || '',
-      });
-      setHandoverCodes((current) => ({ ...current, [claim._id]: '' }));
+      await api.post(`/lost-found/claims/${claim._id}/confirm-handover`);
       setMsg('Your confirmation was saved.');
       await refreshItems();
     } catch (requestError) {
       setError(requestError.response?.data?.message || 'Could not confirm handover.');
-    } finally {
-      setBusyAction('');
-    }
-  };
-
-  const requestNewHandoverCode = async (claim) => {
-    setBusyAction(`code-${claim._id}`);
-    setError('');
-    try {
-      const response = await api.post(`/lost-found/claims/${claim._id}/handover-code`);
-      setMsg(response.data.message);
-    } catch (requestError) {
-      setError(requestError.response?.data?.message || 'Could not send a new handover code.');
     } finally {
       setBusyAction('');
     }
@@ -388,32 +371,6 @@ export default function LostFound({ type = 'lost' }) {
                     Finder:{' '}
                     {claim.finderConfirmed ? 'confirmed handover' : 'waiting to confirm handover'}
                   </p>
-                  {claim.isOwner && !claim.finderConfirmed && (
-                    <p className="text-xs text-slate-500">
-                      A one-time code was sent to your notifications. Share it with the finder only
-                      when the item is physically handed over.
-                    </p>
-                  )}
-                  {claim.isFinder && !claim.finderConfirmed && (
-                    <label className="block text-xs text-slate-600">
-                      One-time code from the owner
-                      <input
-                        className="field mt-1 max-w-xs"
-                        inputMode="numeric"
-                        autoComplete="one-time-code"
-                        maxLength={6}
-                        pattern="[0-9]{6}"
-                        value={handoverCodes[claim._id] || ''}
-                        onChange={(event) =>
-                          setHandoverCodes((current) => ({
-                            ...current,
-                            [claim._id]: event.target.value.replace(/\D/g, '').slice(0, 6),
-                          }))
-                        }
-                        required
-                      />
-                    </label>
-                  )}
                   {claim.status === 'Approved' && (
                     <button
                       type="button"
@@ -421,8 +378,7 @@ export default function LostFound({ type = 'lost' }) {
                       disabled={
                         busyAction === `handover-${claim._id}` ||
                         (claim.isOwner && claim.ownerConfirmed) ||
-                        (claim.isFinder && claim.finderConfirmed) ||
-                        (claim.isFinder && (handoverCodes[claim._id] || '').length !== 6)
+                        (claim.isFinder && claim.finderConfirmed)
                       }
                       onClick={() => confirmHandover(claim)}
                     >
@@ -433,16 +389,6 @@ export default function LostFound({ type = 'lost' }) {
                         : claim.finderConfirmed
                           ? 'Handover confirmed'
                           : 'I handed over the item'}
-                    </button>
-                  )}
-                  {claim.isOwner && claim.status === 'Approved' && !claim.finderConfirmed && (
-                    <button
-                      type="button"
-                      className="ml-2 mt-2 rounded-lg border px-4 py-2 text-sm"
-                      disabled={busyAction === `code-${claim._id}`}
-                      onClick={() => requestNewHandoverCode(claim)}
-                    >
-                      Send a new code
                     </button>
                   )}
                   {claim.status === 'Returned' && (
