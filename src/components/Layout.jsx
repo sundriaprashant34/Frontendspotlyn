@@ -7,6 +7,7 @@ const nav = [
   ['/lost-item', '📦', 'Lost Item'],
   ['/found-item', '🔎', 'Found Item'],
   ['/my-reports', '🗂️', 'My Reports'],
+  ['/notifications', '🔔', 'Notifications'],
   ['/chatbot', '🤖', 'Spotlyn AI'],
 ];
 export default function Layout({ children }) {
@@ -21,11 +22,13 @@ export default function Layout({ children }) {
           ['/admin/lost-found', '📦', 'Lost & Found'],
           ['/admin/staff', '🧑‍🔧', 'Staff'],
           ['/admin/students', '🎓', 'Students'],
+          ['/notifications', '🔔', 'Notifications'],
           ['/chatbot', '🤖', 'Spotlyn AI'],
         ]
       : user?.role === 'STAFF'
         ? [
             ['/staff', '🛠️', 'Staff Dashboard'],
+            ['/notifications', '🔔', 'Notifications'],
             ['/chatbot', '🤖', 'Spotlyn AI'],
           ]
         : nav;

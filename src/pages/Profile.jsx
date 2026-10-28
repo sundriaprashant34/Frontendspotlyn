@@ -9,6 +9,8 @@ export default function Profile() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [sharePhone, setSharePhone] = useState(Boolean(user.sharePhoneForHandover));
+  const [savingPrivacy, setSavingPrivacy] = useState(false);
   const photoInput = useRef(null);
 
   useEffect(() => {
@@ -26,6 +28,10 @@ export default function Profile() {
     const timeoutId = window.setTimeout(() => setError(''), 2000);
     return () => window.clearTimeout(timeoutId);
   }, [error]);
+
+  useEffect(() => {
+    setSharePhone(Boolean(user.sharePhoneForHandover));
+  }, [user.sharePhoneForHandover]);
 
   const choosePhoto = (event) => {
     const selected = event.target.files?.[0];
@@ -67,6 +73,23 @@ export default function Profile() {
       setError(requestError.response?.data?.message || 'Could not update profile photo.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const savePrivacy = async () => {
+    setSavingPrivacy(true);
+    setError('');
+    setMessage('');
+    try {
+      const response = await api.put('/users/profile', {
+        sharePhoneForHandover: sharePhone,
+      });
+      updateUser(response.data.user);
+      setMessage('Handover contact preference updated.');
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Could not update contact preference.');
+    } finally {
+      setSavingPrivacy(false);
     }
   };
 
@@ -134,6 +157,33 @@ export default function Profile() {
             <div className="mt-1 break-words font-semibold text-aubergine-950">{value}</div>
           </div>
         ))}
+      </div>
+      <div className="mt-6 rounded-xl border border-white/80 bg-white/55 p-4">
+        <label className="flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={sharePhone}
+            disabled={!user.phone || savingPrivacy}
+            onChange={(event) => setSharePhone(event.target.checked)}
+          />
+          <span>
+            <span className="font-semibold">Share my phone for approved item handovers</span>
+            <span className="mt-1 block text-slate-600">
+              Your number is shared only with the other student after an admin approves the claim.
+              It is never shown on public item cards.
+              {!user.phone && ' Add a phone number before enabling this preference.'}
+            </span>
+          </span>
+        </label>
+        <button
+          type="button"
+          className="btn-primary mt-4 px-4 py-2 text-sm"
+          disabled={savingPrivacy || sharePhone === Boolean(user.sharePhoneForHandover)}
+          onClick={savePrivacy}
+        >
+          {savingPrivacy ? 'Saving…' : 'Save contact preference'}
+        </button>
       </div>
     </section>
   );

@@ -12,6 +12,7 @@ import LostFound from './pages/LostFound';
 import Admin from './pages/Admin';
 import Staff from './pages/Staff';
 import Chatbot from './pages/Chatbot';
+import Notifications from './pages/Notifications';
 function Guard({ children, roles }) {
   const { user, loading } = useAuth();
   if (loading)
@@ -76,6 +77,14 @@ export default function App() {
         element={
           <Guard>
             <Profile />
+          </Guard>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <Guard>
+            <Notifications />
           </Guard>
         }
       />

@@ -26,9 +26,11 @@ export default function Admin() {
   const [savingStudent, setSavingStudent] = useState(false);
   const [lostItems, setLostItems] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
+  const [lostFoundClaims, setLostFoundClaims] = useState([]);
   const [lostFoundType, setLostFoundType] = useState('lost');
   const [lostFoundError, setLostFoundError] = useState('');
   const [updatingItemId, setUpdatingItemId] = useState('');
+  const [reviewingClaimId, setReviewingClaimId] = useState('');
   const [complaintDetail, setComplaintDetail] = useState(null);
   const [complaintDetailLoading, setComplaintDetailLoading] = useState(false);
   const [complaintDetailError, setComplaintDetailError] = useState('');
@@ -59,10 +61,15 @@ export default function Admin() {
 
   useEffect(() => {
     if (!lostFoundPage) return;
-    Promise.all([api.get('/lost-found/lost'), api.get('/lost-found/found')])
-      .then(([lostResponse, foundResponse]) => {
+    Promise.all([
+      api.get('/lost-found/lost'),
+      api.get('/lost-found/found'),
+      api.get('/lost-found/claims'),
+    ])
+      .then(([lostResponse, foundResponse, claimsResponse]) => {
         setLostItems(lostResponse.data);
         setFoundItems(foundResponse.data);
+        setLostFoundClaims(claimsResponse.data);
         setLostFoundError('');
       })
       .catch((error) => {
@@ -207,6 +214,47 @@ export default function Admin() {
     }
   };
 
+  const reviewLostFoundReport = async (item, decision) => {
+    setUpdatingItemId(item._id);
+    setLostFoundError('');
+    try {
+      const response = await api.put(`/lost-found/${lostFoundType}/${item._id}/review`, {
+        decision,
+      });
+      const updateItems = lostFoundType === 'lost' ? setLostItems : setFoundItems;
+      updateItems((current) =>
+        current.map((report) => (report._id === item._id ? response.data : report))
+      );
+    } catch (error) {
+      setLostFoundError(error.response?.data?.message || 'Could not review item report');
+    } finally {
+      setUpdatingItemId('');
+    }
+  };
+
+  const reviewLostFoundClaim = async (claim, decision) => {
+    setReviewingClaimId(claim._id);
+    setLostFoundError('');
+    try {
+      const response = await api.put(`/lost-found/claims/${claim._id}/review`, { decision });
+      setLostFoundClaims((current) =>
+        current.map((entry) => (entry._id === claim._id ? response.data : entry))
+      );
+      const updateItems = claim.itemType === 'lost' ? setLostItems : setFoundItems;
+      updateItems((current) =>
+        current.map((item) =>
+          item._id === claim.item._id
+            ? { ...item, status: decision === 'approve' ? 'Matched' : item.status }
+            : item
+        )
+      );
+    } catch (error) {
+      setLostFoundError(error.response?.data?.message || 'Could not review claim');
+    } finally {
+      setReviewingClaimId('');
+    }
+  };
+
   if (lostFoundPage) {
     const reportItems = lostFoundType === 'lost' ? lostItems : foundItems;
     return (
@@ -241,6 +289,7 @@ export default function Admin() {
                 <th className="pr-4">Category / Location</th>
                 <th className="pr-4">Reported by</th>
                 <th className="pr-4">Date</th>
+                <th className="pr-4">Report review</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -278,6 +327,31 @@ export default function Admin() {
                   <td className="pr-4" data-label="Date">
                     {item.date ? new Date(item.date).toLocaleDateString() : 'Not provided'}
                   </td>
+                  <td className="pr-4" data-label="Report review">
+                    <div className="text-xs font-semibold">
+                      {item.reviewStatus || 'Legacy approved'}
+                    </div>
+                    {item.reviewStatus === 'Pending' && (
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          type="button"
+                          className="btn-primary px-3 py-1 text-xs"
+                          disabled={updatingItemId === item._id}
+                          onClick={() => reviewLostFoundReport(item, 'approve')}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-lg border border-red-200 px-3 py-1 text-xs text-red-700"
+                          disabled={updatingItemId === item._id}
+                          onClick={() => reviewLostFoundReport(item, 'reject')}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
+                  </td>
                   <td data-label="Status">
                     <select
                       className="field min-w-36"
@@ -302,6 +376,57 @@ export default function Admin() {
               No {lostFoundType} item reports.
             </p>
           )}
+        </div>
+        <div className="card mt-6">
+          <h2 className="section-title">Ownership and finder claims</h2>
+          <p className="section-sub mt-1">
+            Verify identifying details before approving. Contact details remain private until
+            approval.
+          </p>
+          <div className="mt-4 space-y-3">
+            {lostFoundClaims.map((claim) => (
+              <article key={claim._id} className="rounded-xl border border-slate-200 p-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <div className="font-semibold">
+                      {claim.item?.itemName} · {claim.itemType} report
+                    </div>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Claim by {claim.claimant?.name || 'Unknown'} (
+                      {claim.claimant?.phone || 'No phone'})
+                    </p>
+                    <p className="mt-2 text-sm">{claim.details}</p>
+                  </div>
+                  <span className="badge">{claim.status}</span>
+                </div>
+                {claim.status === 'Pending' && (
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      className="btn-primary px-4 py-2 text-sm"
+                      disabled={reviewingClaimId === claim._id}
+                      onClick={() => reviewLostFoundClaim(claim, 'approve')}
+                    >
+                      Approve claim
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-red-200 px-4 py-2 text-sm text-red-700"
+                      disabled={reviewingClaimId === claim._id}
+                      onClick={() => reviewLostFoundClaim(claim, 'reject')}
+                    >
+                      Reject claim
+                    </button>
+                  </div>
+                )}
+              </article>
+            ))}
+            {lostFoundClaims.length === 0 && (
+              <p className="py-6 text-center text-sm text-slate-500">
+                No claims have been submitted.
+              </p>
+            )}
+          </div>
         </div>
       </section>
     );
