@@ -22,7 +22,6 @@ export default function Layout({ children }) {
           ['/admin/lost-found', '📦', 'Lost & Found'],
           ['/admin/staff', '🧑‍🔧', 'Staff'],
           ['/admin/students', '🎓', 'Students'],
-          ['/notifications', '🔔', 'Notifications'],
           ['/chatbot', '🤖', 'Spotlyn AI'],
         ]
       : user?.role === 'STAFF'
