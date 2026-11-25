@@ -43,6 +43,22 @@
   .btn-primary:disabled {
     cursor: not-allowed;
     opacity: 0.6;
+    transform: none;
+  }
+  button[aria-busy='true'] {
+    cursor: wait;
+  }
+  button[aria-busy='true']::after {
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 9999px;
+    content: '';
+    display: inline-block;
+    margin-left: 0.5rem;
+    vertical-align: -0.15rem;
+    animation: request-spin 700ms linear infinite;
   }
   .btn-light {
     display: inline-flex;
@@ -220,6 +236,11 @@ body {
   }
   to {
     transform: translate3d(1.2%, 0.8%, 0) scale(1.04);
+  }
+}
+@keyframes request-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 button,
