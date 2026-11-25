@@ -47,7 +47,7 @@ api.interceptors.request.use((config) => {
   config.headers['Idempotency-Key'] = idempotencyKey;
   config.headers['X-Spotlyn-Deduplicated'] = existing ? 'true' : 'false';
 
-  const originalAdapter = config.adapter || api.defaults.adapter;
+  const originalAdapter = axios.getAdapter(config.adapter || api.defaults.adapter);
   config.adapter = async (adapterConfig) => {
     const current = inflightMutations.get(requestKey);
     if (current) return current.promise;
